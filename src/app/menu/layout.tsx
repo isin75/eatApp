@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client'
 
 import { useState } from 'react'
@@ -43,7 +44,7 @@ function LayoutContent({ children }: { children: React.ReactNode }) {
 				headers: { 'Content-Type': 'application/json' },
 				body: JSON.stringify({
 					cartItem,
-					name: session ? session.user.name : null,
+					name: session?.user?.name ?? null,
 				}),
 			})
 			console.log(response)

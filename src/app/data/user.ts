@@ -1,25 +1,14 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { cache } from 'react'
 import { prisma } from '../lib/prisma'
 import { verifySession } from '../lib/session'
 import { taintUniqueValue } from 'next/dist/server/app-render/rsc/taint'
 
-interface User {
-	id: string
-	name: string
-	email: string
-	password: string
-	role: string
-	session: {
-		token: string
-		expires: Date
-	}
-}
-
-function canViewAuditTrail(auditTrail, role) {
+function canViewAuditTrail(auditTrail: any, role: string) {
 	return role === 'admin' ? auditTrail : null
 }
 
-function userDTO(user) {
+function userDTO(user: any) {
 	taintUniqueValue(
 		'Do not pass a user session token to the client',
 		user,
