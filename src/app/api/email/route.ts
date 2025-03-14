@@ -3,7 +3,11 @@ import nodemailer from 'nodemailer'
 
 export async function POST(req: NextRequest) {
 	try {
-		const { cartItem, name } = await req.json()
+		const {
+			cartItem,
+			name,
+		}: { cartItem: { title: string; count: number }[]; name: string } =
+			await req.json()
 
 		if (!cartItem || cartItem.length === 0) {
 			return NextResponse.json({ error: 'Order is empty' }, { status: 400 })

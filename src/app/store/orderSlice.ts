@@ -36,14 +36,18 @@ export const orderSlice = createSlice({
 		},
 		decrementItem: (state, action: PayloadAction<Order>) => {
 			state.order = state.order.map(item =>
-				item.id === action.payload ? { ...item, count: item.count - 1 } : item
+				item.id === action.payload.id
+					? { ...item, count: item.count - 1 }
+					: item
 			)
 		},
 		incrementItem: (state, action: PayloadAction<Order>) => {
 			console.log(action.payload.id)
 
 			state.order = state.order.map(item =>
-				item.id === action.payload ? { ...item, count: item.count + 1 } : item
+				item.id === action.payload.id
+					? { ...item, count: item.count + 1 }
+					: item
 			)
 		},
 		clearCart: state => {

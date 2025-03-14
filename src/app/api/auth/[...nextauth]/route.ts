@@ -4,6 +4,18 @@ import { PrismaAdapter } from '@next-auth/prisma-adapter'
 import { prisma } from '@/app/lib/prisma'
 import bcrypt from 'bcryptjs'
 
+declare module 'next-auth' {
+	interface Session {
+		user: {
+			id: string
+			role?: string
+			name?: string | null
+			email?: string | null
+			image?: string | null
+		}
+	}
+}
+
 const handler = NextAuth({
 	adapter: PrismaAdapter(prisma),
 	providers: [
@@ -36,7 +48,7 @@ const handler = NextAuth({
 	callbacks: {
 		async jwt({ token, user }) {
 			if (user) {
-				token.role = user.role
+				token.role = (user as { role?: string }).role
 				token.name = user.name
 			}
 			console.log('jwt', token, user)
@@ -46,8 +58,10 @@ const handler = NextAuth({
 
 		async session({ session, token }) {
 			if (session.user) {
-				session.user.id = token.sub
-				session.user.role = token.role
+				if (token.sub) {
+					session.user.id = token.sub
+				}
+				session.user.role = token.role as string | undefined
 				session.user.name = token.name
 			}
 			console.log('session', session)

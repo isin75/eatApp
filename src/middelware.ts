@@ -10,7 +10,7 @@ export default async function middelware(req: NextRequest) {
 	if (isProtectedRoute) {
 		const cookieStore = await cookies()
 		const cookie = cookieStore.get('session')?.value
-		const session = await decrypt(cookie)
+		const session = cookie ? await decrypt(cookie) : null
 
 		if (!session?.userId) {
 			return NextResponse.redirect(new URL('/login', req.nextUrl))

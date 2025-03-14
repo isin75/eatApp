@@ -16,7 +16,7 @@ const cookie = {
 	duration: 24 * 60 * 60 * 1000,
 }
 
-export async function encrypt(payload) {
+export async function encrypt(payload: Record<string, unknown>) {
 	return new SignJWT(payload)
 		.setProtectedHeader({ alg: 'HS256' })
 		.setIssuedAt()
@@ -24,7 +24,7 @@ export async function encrypt(payload) {
 		.sign(key)
 }
 
-export async function decrypt(session) {
+export async function decrypt(session: string) {
 	try {
 		const { payload } = await jwtVerify(session, key, { algorithms: ['HS256'] })
 		return payload
@@ -50,12 +50,16 @@ export async function createSession(userId: string) {
 
 export async function verifySession() {
 	const cookieStore = await cookies()
-	const cookie = cookieStore.get(cookies.name)?.value
-	const session = await decrypt(cookie)
+	const cookieValue = cookieStore.get(cookie.name)?.value
+	if (!cookieValue) {
+		redirect('/login')
+		return
+	}
+	const session = await decrypt(cookieValue)
 	if (!session?.userId || typeof session.userId !== 'string') {
 		redirect('/login')
 	}
-	return { userId: session.userId }
+	return { userId: session.userId, role: session.role }
 }
 
 export async function deleteSession() {

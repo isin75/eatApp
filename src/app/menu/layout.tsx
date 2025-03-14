@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 'use client'
 
-import { useState } from 'react'
+import { Suspense, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import SideNav from '@/app/ui/menu/sidenav'
 import { Provider } from 'react-redux'
@@ -16,7 +16,9 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 	return (
 		<Provider store={store}>
 			<SessionProvider>
-				<LayoutContent>{children}</LayoutContent>
+				<Suspense fallback={<p>Loading menu...</p>}>
+					<LayoutContent>{children}</LayoutContent>
+				</Suspense>
 			</SessionProvider>
 		</Provider>
 	)

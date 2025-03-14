@@ -55,7 +55,9 @@ export default function DishCard({ dishes }: { dishes: Dish[] }) {
 							</Button>
 						</div>
 						<Button
-							onClick={() => handleAddToCart(dish.id, dish.name, count)}
+							onClick={() =>
+								handleAddToCart(dish.id.toString(), dish.name, count)
+							}
 							className='bg-blue-500 text-white px-4 py-2 rounded'
 						>
 							<ShoppingCartIcon className='h-5 w-5' />

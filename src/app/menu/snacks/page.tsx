@@ -1,3 +1,5 @@
+'use client'
+
 import DishForm from '@/app/ui/dishes-form'
 
 export default function Page() {
