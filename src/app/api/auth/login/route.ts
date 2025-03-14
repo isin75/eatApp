@@ -18,8 +18,11 @@ export async function POST(req: Request) {
 			where: { email: validatedData.email },
 		})
 
-		if (!existingUser) {
-			return NextResponse.json({ error: 'User not found' }, { status: 404 })
+		if (existingUser) {
+			return NextResponse.json(
+				{ error: 'User already exists' },
+				{ status: 409 }
+			)
 		}
 
 		const hashedPassword = await hash(validatedData.password, 10)
